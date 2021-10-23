@@ -1,0 +1,14 @@
+int getMinimumCost(int k, vector<int> c) 
+{
+    sort(c.begin(), c.end(),greater<int>());    
+    int n=c.size(), price=0, prev=0;
+    for (int i=0,j=k-1; i<n; i++)
+    {   //add max. cost flower first to minimise price
+        price+= c[i]* (prev +1);
+        if(i==j){  //if a customer bought k flowers
+            prev ++;
+            j+=k;
+        }
+    }    
+    return price;
+}
