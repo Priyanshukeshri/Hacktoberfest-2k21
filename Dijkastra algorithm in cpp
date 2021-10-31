@@ -1,0 +1,60 @@
+#include<iostream>
+#include<climits>
+using namespace std;
+
+int findMinIndex(bool *visited,int *distance,int n){
+    int minIndex=-1;
+    for(int i=0;i<n;i++){
+        if(!visited[i] && (minIndex==-1 || distance[minIndex]>distance[i]))
+            minIndex=i;
+    }
+    return minIndex;
+}
+
+void dijkstra(int **edges,int n,int e,int source){
+bool *visited=new bool[n];
+int *distance=new int[n];
+int *parent=new int[n];
+for(int i=0;i<n;i++){
+    visited[i]=false;
+    distance[i]=INT_MAX;
+}
+parent[source]=-1;
+distance[source]=0;
+for(int i=0;i<n-1;i++){
+  int minIndex=findMinIndex(visited,distance,n);
+  visited[minIndex]=true;
+  for(int j=0;j<n;j++){
+    if(edges[minIndex][j]!=0 && !visited[j]){
+        int pathDistance=distance[minIndex]+edges[minIndex][j];
+        if(distance[j]>pathDistance){
+            distance[j]=pathDistance;
+            parent[j]=minIndex;}
+    }
+  }
+}
+for(int i=1;i<n;i++){
+  if(i<parent[i])
+    cout<<i<<" "<<parent[i]<<" "<<distance[i]<<"\n";
+   else
+   cout<<parent[i]<<" "<<i<<" "<<distance[i]<<"\n";
+   }
+}
+
+
+int main(){
+int n,e;
+cin>>n>>e;
+int **edges=new int*[n];
+for(int i=0;i<n;i++){
+    edges[i]=new int[n];
+    for(int j=0;j<n;j++)
+        edges[i][j]=0;
+}
+ for(int i=0;i<e;i++){
+    int s,d,w;
+    cin>>s>>d>>w;
+    edges[s][d]=edges[d][s]=w;
+ }
+    dijkstra(edges,n,e,0);
+}
